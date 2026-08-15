@@ -22,4 +22,4 @@ USER luanti
 # World and subgames are mounted as volumes; config path passed via exec.
 VOLUME ["/var/lib/luanti/world", "/var/lib/luanti/subgames"]
 
-ENTRYPOINT ["/usr/games/luanti-server", "--config", "/etc/luanti/minetest.conf", "--world", "/var/lib/luanti/world"]
+ENTRYPOINT ["/usr/games/luantiserver", "--config", "/etc/luanti/minetest.conf", "--world", "/var/lib/luanti/world"]
