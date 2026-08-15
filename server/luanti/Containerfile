@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
@@ -22,4 +22,4 @@ USER luanti
 # World and subgames are mounted as volumes; config path passed via exec.
 VOLUME ["/var/lib/luanti/world", "/var/lib/luanti/subgames"]
 
-ENTRYPOINT ["luanti-server", "--config", "/etc/luanti/minetest.conf", "--world", "/var/lib/luanti/world"]
+ENTRYPOINT ["/usr/games/luanti-server", "--config", "/etc/luanti/minetest.conf", "--world", "/var/lib/luanti/world"]

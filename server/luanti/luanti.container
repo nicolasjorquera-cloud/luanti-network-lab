@@ -18,8 +18,6 @@ Volume=/home/beerus/luanti-data/minetest.conf:/etc/luanti/minetest.conf:ro,Z
 PublishPort=100.64.0.0:30000:30000/udp
 PublishPort=192.168.0.0:30000:30000/udp
 
-Exec=luanti-server --config /etc/luanti/minetest.conf --world /var/lib/luanti/world
-
 [Service]
 Restart=on-failure
 TimeoutStartSec=0
