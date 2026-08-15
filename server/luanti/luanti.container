@@ -10,7 +10,6 @@ ContainerName=luanti
 
 # Persistent data (host paths)
 Volume=/home/beerus/luanti-data/world:/var/lib/luanti/world:Z
-Volume=/home/beerus/luanti-data/subgames:/var/lib/luanti/subgames:Z
 Volume=/home/beerus/luanti-data/minetest.conf:/etc/luanti/minetest.conf:ro,Z
 
 # Publish UDP 30000 only to Tailscale and LAN interfaces

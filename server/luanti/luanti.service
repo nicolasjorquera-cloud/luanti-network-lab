@@ -1,0 +1,21 @@
+[Unit]
+Description=Luanti game server (Mineclonia)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Environment=PODMAN_SYSTEMD_UNIT=%n
+ExecStart=/usr/bin/podman run --rm --replace --name luanti \
+    --user 0 \
+    -v /home/beerus/luanti-data/world:/var/lib/luanti/world \
+    -v /home/beerus/luanti-data/minetest.conf:/etc/luanti/minetest.conf:ro \
+    -p %TS_IP%:30000:30000/udp \
+    -p %LAN_IP%:30000:30000/udp \
+    localhost/luanti-network-lab/luanti:latest
+ExecStop=/usr/bin/podman stop -t 10 luanti
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
