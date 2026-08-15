@@ -26,8 +26,12 @@
   lives on the host; containers publish ports onto the `tailscale0` interface.
 - **nftables (host)**: DENY-by-default host firewall. Only UDP 30000 on
   trusted interfaces (tailscale0, LAN) is allowed.
-- **Podman pod (rootless)**: `luanti` and `bridge` containers share a network
-  namespace; `bridge` is only reachable from inside the pod.
+- **Podman (rootless)**: the `luanti` container runs unprivileged (container
+  root maps to the host user). Managed by an explicit systemd user unit
+  (`server/luanti/luanti.service`, deployed by `scripts/deploy-luanti-service.sh`).
+  Quadlet units are provided (`luanti.pod` / `luanti.container`) for hosts where
+  the podman system generator is available; stale user managers may not re-run
+  generators, so the explicit unit is the default.
 - **Luanti + Mineclonia**: game server with persistent world volume.
 - **Bridge (Phase 2)**: Python FastAPI service that forwards in-game chat to
   Dialogflow CX and returns replies.
