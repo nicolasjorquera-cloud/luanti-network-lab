@@ -41,18 +41,18 @@ Three tracks:
 ```text
 docs/            architecture, threat model, security lab notes
 server/luanti/   container image, systemd unit, config
-server/bridge/   Python bridge: Luanti chat ↔ Dialogflow CX (Phase 2)
-infra/terraform/ GCP infrastructure as code (Phase 2)
-finops/          Cloud Billing cost reporting (Phase 2)
+server/bridge/   Python bridge: Luanti chat ↔ Dialogflow CX
+infra/terraform/ GCP infrastructure as code (scaffold)
 firewall/        nftables configuration
 security/        offensive lab (DNS attacks, parental visibility)
+tailscale/       Tailscale setup notes
 scripts/         install / status / reset
 ```
 
 ## Status
 
 - Phase 0 (repo) ✅ · Phase 1 (playable server) ✅
-- Phase 2 (chatbot GCP) · Phase 3 (offensive DNS lab) — in progress
+- Phase 2 (chatbot GCP) · Phase 3 (offensive DNS lab) — planned
 
 ## License
 
