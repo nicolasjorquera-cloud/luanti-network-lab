@@ -3,7 +3,7 @@ FROM debian:trixie-slim
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
       ca-certificates \
-      git \
+      curl \
       luanti-server \
       procps \
  && rm -rf /var/lib/apt/lists/*
@@ -12,9 +12,15 @@ RUN useradd --system --uid 30000 --create-home --home /var/lib/luanti luanti \
  && mkdir -p /var/lib/luanti/world \
  && chown -R luanti:luanti /var/lib/luanti
 
-# Mineclonia subgame (Minecraft-like), installed into the server games dir
-RUN git clone --depth 1 https://codeberg.org/mineclonia/mineclonia.git \
-      /usr/share/luanti/games/mineclonia
+# Mineclonia subgame (Minecraft-like), installed into the server games dir.
+# Pinned release tarball (not git HEAD) for reproducible builds and resilience
+# against git smart-HTTP issues from CI runners.
+ARG MINECLONIA_VERSION=0.123.0
+RUN curl -fsSL -o /tmp/mineclonia.tar.gz \
+      "https://codeberg.org/mineclonia/mineclonia/archive/${MINECLONIA_VERSION}.tar.gz" \
+ && mkdir -p /usr/share/luanti/games/mineclonia \
+ && tar -xzf /tmp/mineclonia.tar.gz --strip-components=1 -C /usr/share/luanti/games/mineclonia \
+ && rm /tmp/mineclonia.tar.gz
 
 USER luanti
 
