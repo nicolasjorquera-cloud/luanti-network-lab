@@ -1,7 +1,5 @@
 # Phase 0 + 1 Implementation Plan: Professional Repo + Playable Secure Server
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
-
 **Goal:** Create a professional, English-only, public-ready GitHub repository for `luanti-network-lab`, and a secure playable Luanti (Mineclonia) server on an Ubuntu host using Podman rootless + quadlet, Tailscale, and nftables.
 
 **Architecture:** The repo is a portfolio-quality project (Apache-2.0, CI with gitleaks, conventional commits). The server runs as a Podman rootless pod managed by systemd (quadlet) on the Ubuntu host. Tailscale on the host provides the private overlay network; nftables applies a DENY-by-default host firewall. The Luanti container publishes UDP 30000 only to the Tailscale and LAN interfaces.

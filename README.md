@@ -48,6 +48,8 @@ scripts/         install / status / reset
 - Phase 0 (repo) ✅ · Phase 1 (playable server) ✅
 - Phase 2 (chatbot GCP) — planned
 
+Full status, decisions and roadmap: [docs/ROADMAP.md](docs/ROADMAP.md).
+
 ## License
 
 [Apache-2.0](LICENSE)
