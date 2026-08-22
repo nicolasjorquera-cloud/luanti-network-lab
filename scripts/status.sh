@@ -10,10 +10,10 @@ echo "── Podman pod ──────────────────�
 podman ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 
 echo "── systemd units ──────────────────────────"
-systemctl --user status luanti-pod luanti-container --no-pager || true
+systemctl --user status luanti --no-pager | head -4 || true
 
 echo "── Firewall (port 30000) ──────────────────"
-sudo nft list ruleset 2>/dev/null | grep "dport 30000" || echo "no 30000 rules"
+sudo ufw status verbose 2>/dev/null | grep "30000" || echo "no 30000 rule active"
 
 echo "── Listening (UDP 30000) ──────────────────"
 ss -lunp | grep 30000 || echo "not listening"

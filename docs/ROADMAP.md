@@ -19,7 +19,7 @@ specification lives in [`docs/specs/`](specs/).
 | Decision | Choice | Rationale |
 |---|---|---|
 | Deployment | Podman rootless + systemd unit | Portfolio value, clean host; explicit unit over quadlet generator (unreliable on a stale user manager) |
-| Network | Tailscale overlay on the host; nftables DENY-by-default | Private mesh, never exposed to the public Internet |
+| Network | Tailscale overlay = ACL; UFW DENY-by-default, Tailscale range only | Private zero-trust mesh; never exposed to the Internet **or LAN** |
 | Game | Mineclonia | Minecraft-like, familiar for a child |
 | Chatbot | Dialogflow CX, deterministic intents only | Cheap, fast, predictable; no LLM in the MVP |
 | Bridge | Python/FastAPI (MVP) → Rust (Phase 4) | Official SDK + velocity; Rust as a learning target |

@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
-# Creates the host-side data directory for the Luanti pod.
+# Prepares the host-side configuration for the Luanti container.
+# The world lives in the Podman named volume `luanti-world`, not on the host.
 set -euo pipefail
 
-DATA_DIR="${LUANTI_DATA_DIR:-/home/beerus/luanti-data}"
+CONFIG_DIR="${LUANTI_CONFIG_DIR:-$HOME/luanti-data}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-mkdir -p "${DATA_DIR}/world"
-cp /home/beerus/luanti/server/luanti/minetest.conf "${DATA_DIR}/minetest.conf"
+mkdir -p "${CONFIG_DIR}"
+cp "${SCRIPT_DIR}/../server/luanti/minetest.conf" "${CONFIG_DIR}/minetest.conf"
 
-echo "==> Data dir ready at ${DATA_DIR}"
-ls -la "${DATA_DIR}"
+echo "==> Config dir ready at ${CONFIG_DIR}"
+ls -la "${CONFIG_DIR}"

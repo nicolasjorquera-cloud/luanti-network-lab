@@ -18,12 +18,12 @@ Beyond playing, the repository is a **professional portfolio artifact** demonstr
 
 ### MVP success criteria
 
-1. Parent (Linux) and child (Windows) can play together over LAN **and** from
-   outside the home via Tailscale.
-2. The server is not exposed to the public Internet.
+1. Parent (Linux) and child (Windows) can play together over **Tailscale** only
+   (zero-trust: no LAN path). Both devices are in the same tailnet.
+2. The server is not exposed to the public Internet **nor to the local LAN**.
 3. The chatbot answers when mentioned by name; it greets the player on join and
    proposes missions.
-4. Blocking UDP 30000 in nftables demonstrably disconnects the client.
+4. Blocking UDP 30000 (removing the UFW allow rule) demonstrably disconnects the client.
 5. Zero secrets in the repository (gitleaks + strict `.gitignore`).
 
 ## 2. Decisions
@@ -31,7 +31,7 @@ Beyond playing, the repository is a **professional portfolio artifact** demonstr
 | Decision | Choice | Rationale |
 |---|---|---|
 | Deployment | Podman rootless + quadlet (pod) | Portfolio value, clean host, reproducible |
-| Network | Tailscale on the host; nftables DENY-by-default | VPN endpoint; no public exposure |
+| Network | Tailscale on the host as the ACL; UFW DENY-by-default, Tailscale range only | VPN endpoint = identity layer; zero exposure to LAN or Internet |
 | Game | Mineclonia | Familiar for the child (Minecraft-like) |
 | Chatbot | Dialogflow CX (existing credits), deterministic intents | Cheap, fast, reliable for predictable questions |
 | Bridge | Python (MVP) → Rust (Phase 4) | Official SDK + velocity; Rust as a learning target |
@@ -54,9 +54,10 @@ Beyond playing, the repository is a **professional portfolio artifact** demonstr
             │  │  ├─ luanti     │  │  Mineclonia, :30000/udp
             │  │  └─ bridge     │  │  FastAPI → Dialogflow CX
             │  └────────────────┘  │
-            │  Tailscale + nftables│
+            │  Tailscale (ACL) +   │
+            │  UFW (zero-trust)    │
             └──────────┬──────────┘
-                       │ 100.x.x.x:30000 (Tailscale) + LAN
+                       │ 100.x.x.x:30000 (Tailscale ONLY)
              ┌─────────┴─────────┐
              │                   │
         Ubuntu (parent)      Windows (child)
@@ -108,7 +109,7 @@ Terraform. No data store / bucket / LLM in the MVP.
 | Phase | Deliverable |
 |---|---|
 | **0** | Professional scaffold: `git init`, English README / CONTRIBUTING / SECURITY / CODE_OF_CONDUCT / CHANGELOG, Apache-2.0 LICENSE, `.gitignore`, `.editorconfig`, GitHub Actions CI (lint, pytest, gitleaks, terraform fmt/validate), badges, repo structure. |
-| **1** | Playable MVP: Tailscale (host + Windows), Podman rootless, Luanti + Mineclonia quadlet pod, nftables DENY-by-default, `minetest.conf` whitelist, Windows client connect (Tailscale + LAN), verify disconnect when UDP 30000 is blocked. |
+| **1** | Playable MVP: Tailscale (host + Windows), Podman rootless, Luanti + Mineclonia quadlet pod, UFW DENY-by-default Tailscale-only (zero-trust), `minetest.conf` whitelist, Windows client connect via Tailscale, verify disconnect when UDP 30000 is blocked. |
 | **2** | Chatbot GCP-first: Terraform (CX agent / flows / intents / pages, Service Account, Secret Manager, IAM, billing budget); Dialogflow CX agent design (welcome, mission, crafting, fallback); Python bridge (FastAPI, `/chat` + `/welcome`, sessions, rate-limit, Cloud Logging structured logs); Lua mod `bot`; shared-token auth between mod and bridge; unit tests (mocked CX) + in-game tests; FinOps cost-report script. |
 | **3** | Moderator + personality; optional App Builder data store (GCS bucket or wiki URL) for open-ended fallbacks; automated FinOps cost report via GitHub Actions cron. |
 | **4** | Rust bridge port (`reqwest` + `jsonwebtoken` + `serde`, CX REST `:detectIntent`, token cache), Python as reference. |
@@ -153,7 +154,7 @@ luanti-network-lab/
 │   ├── cost_report.py
 │   └── README.md
 ├── firewall/
-│   └── nftables.conf
+│   └── setup-ufw.sh
 ├── dialogflow/
 │   └── agent-design.md
 ├── .github/workflows/
@@ -167,12 +168,13 @@ luanti-network-lab/
 
 ## 7. Testing
 
-- Phase 1: LAN + Tailscale connection; nftables block/unblock UDP 30000 →
+- Phase 1: Tailscale connection only; UFW allow rule add/remove for UDP 30000 →
   disconnect/reconnect observed.
 - Phase 2: bridge unit tests (mocked Dialogflow), in-game tests (mention,
   welcome, fallback with bridge off), gitleaks in CI.
-- Security: `nmap` from LAN and from an external network (no Tailscale) shows
-  only 30000/udp on trusted interfaces; nothing public.
+- Security: `nmap` from the LAN and from an external network (no Tailscale) shows
+  **nothing** on trusted interfaces; only from a Tailscale device is
+  30000/udp reachable. Nothing public, nothing on LAN.
 - FinOps: billing budget + alert thresholds created by Terraform; cost report
   returns real data.
 
@@ -181,5 +183,5 @@ luanti-network-lab/
 - Service account JSON key in Secret Manager (not host volumes); bridge reads it
   via ADC. Never in the repository.
 - gitleaks in CI; strict `.gitignore` (`.tfstate`, credential JSON, `.env`).
-- nftables DENY-by-default; whitelist in `minetest.conf`; shared token between
-  mod and bridge; AppArmor active.
+- UFW DENY-by-default (Tailscale range only); whitelist in `minetest.conf`;
+  shared token between mod and bridge; AppArmor active.
