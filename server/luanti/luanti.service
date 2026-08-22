@@ -7,9 +7,8 @@ Wants=network-online.target
 Type=simple
 Environment=PODMAN_SYSTEMD_UNIT=%n
 ExecStart=/usr/bin/podman run --rm --replace --name luanti \
-    --user 0 \
-    -v /home/beerus/luanti-data/world:/var/lib/luanti/world \
-    -v /home/beerus/luanti-data/minetest.conf:/etc/luanti/minetest.conf:ro \
+    -v luanti-world:/var/lib/luanti/world \
+    -v %CONFIG_DIR%/minetest.conf:/etc/luanti/minetest.conf:ro \
     -p %TS_IP%:30000:30000/udp \
     -p %LAN_IP%:30000:30000/udp \
     localhost/luanti-network-lab/luanti:latest

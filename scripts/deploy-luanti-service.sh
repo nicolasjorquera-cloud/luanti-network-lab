@@ -13,10 +13,13 @@ if [[ -z "${TS_IP}" ]]; then
   exit 1
 fi
 LAN_IP="$(hostname -I | awk '{print $1}')"
-echo "==> Tailscale IP: ${TS_IP}   LAN IP: ${LAN_IP}"
+CONFIG_DIR="${LUANTI_CONFIG_DIR:-$HOME/luanti-data}"
+echo "==> Tailscale IP: ${TS_IP}   LAN IP: ${LAN_IP}   Config dir: ${CONFIG_DIR}"
 
 mkdir -p ~/.config/systemd/user
-sed -e "s/%TS_IP%/${TS_IP}/" -e "s/%LAN_IP%/${LAN_IP}/" \
+sed -e "s/%TS_IP%/${TS_IP}/" \
+    -e "s/%LAN_IP%/${LAN_IP}/" \
+    -e "s|%CONFIG_DIR%|${CONFIG_DIR}|g" \
   "${SCRIPT_DIR}/../server/luanti/luanti.service" \
   > ~/.config/systemd/user/luanti.service
 
