@@ -8,9 +8,9 @@ credentials in issues.
 
 ## Security model
 
-- **Private network**: the game server is reachable only over Tailscale and the
-  local LAN — never exposed to the public Internet.
-- **DENY-by-default**: nftables drops all unapproved inbound traffic.
+- **Zero-trust network**: the game server is reachable **only** over Tailscale
+  (the ACL); nothing is exposed to the public Internet **nor to the local LAN**.
+- **DENY-by-default**: UFW drops all unapproved inbound traffic (Tailscale range only).
 - **Least privilege**: services run as dedicated users/namespaces in a
   rootless Podman pod.
 - **Secrets**: Google service account keys live in Secret Manager and are

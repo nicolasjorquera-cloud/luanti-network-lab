@@ -28,5 +28,9 @@ Then connect Luanti to `<host-tailscale-ip>:30000`.
 
 ## Security notes
 
-- The game server is only reachable over `tailscale0` (nftables enforces this).
-- Tailscale DNS (`100.100.100.100:53`) is allowed by the firewall.
+- **Tailscale IS the access-control layer (ACL)**: the game server is reachable
+  **only** over Tailscale. UFW allows the Tailscale range; everything else,
+  including the local LAN, is dropped — zero-trust, no LAN path.
+- Tailscale DNS (`100.100.100.100:53`) is allowed by the firewall, also only
+  from the `tailscale0` interface.
+- No device outside the tailnet — no matter its network — can reach the host.

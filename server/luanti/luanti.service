@@ -10,7 +10,6 @@ ExecStart=/usr/bin/podman run --rm --replace --name luanti \
     -v luanti-world:/var/lib/luanti/world \
     -v %CONFIG_DIR%/minetest.conf:/etc/luanti/minetest.conf:ro \
     -p %TS_IP%:30000:30000/udp \
-    -p %LAN_IP%:30000:30000/udp \
     localhost/luanti-network-lab/luanti:latest
 ExecStop=/usr/bin/podman stop -t 10 luanti
 Restart=on-failure

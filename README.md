@@ -16,8 +16,11 @@ credits only).
 Two tracks:
 
 1. **Play & learn** — a secure Luanti (Mineclonia) server for a parent and child:
-   - Reachable only via a private **Tailscale** overlay (never public Internet)
-   - **DENY-by-default** host firewall (**nftables**)
+   - **Zero-trust networking**: reachable **only** via a private **Tailscale**
+     overlay that acts as the access-control layer (ACL). Never public Internet,
+     never LAN — Tailscale is the only path in.
+   - **DENY-by-default** host firewall (**UFW**): only traffic from the Tailscale
+     network range is allowed in; everything else (including LAN) is dropped.
    - Server as a **Podman rootless** container managed by systemd
 2. **GCP / AI platform** — an in-game chatbot powered by **Dialogflow CX**:
    - The CX agent is managed as **Terraform IaC**
@@ -26,6 +29,8 @@ Two tracks:
 
 ## Principles
 
+- **Zero trust**: no one is trusted by default. Tailscale identity is the only
+  key to the network; UFW drops everything else (including LAN).
 - **Observable**: every control can be inspected and deliberately broken
   (block UDP 30000 → clients disconnect).
 - **Least privilege**: rootless containers, explicit network access.
@@ -38,7 +43,7 @@ docs/            architecture, threat model, security lab notes
 server/luanti/   container image, systemd unit, config
 server/bridge/   Python bridge: Luanti chat ↔ Dialogflow CX
 infra/terraform/ GCP infrastructure as code (scaffold)
-firewall/        nftables configuration
+firewall/        UFW configuration and setup script
 tailscale/       Tailscale setup notes
 scripts/         install / status / reset
 ```
