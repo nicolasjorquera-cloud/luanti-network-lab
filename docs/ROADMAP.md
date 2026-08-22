@@ -37,8 +37,9 @@ Real problems hit while building Phase 1 and how they were resolved:
   the base image to `debian:trixie-slim`.
 - The server binary is `/usr/games/luantiserver` (no hyphen) → corrected the
   container `ENTRYPOINT`.
-- The `luanti` user (uid 30000) could not write host-owned volume data → run the
-  container as rootless root (`--user 0`).
+- The `luanti` user (uid 30000) could not write host-owned volume data → fixed by
+  switching the world to a **Podman named volume** (`luanti-world`), so the
+  container runs unprivileged as the `luanti` user (no `--user 0`).
 - The server requires `--gameid`; the games directory is `/usr/share/luanti/games`
   (not `subgames`) → Mineclonia is baked into the image and selected via `--gameid`.
 - Container ports must be published on the **pod**, not the container.
