@@ -52,5 +52,6 @@ jobs:
       - uses: docker/build-push-action@v6
         with:
           context: server/luanti
+          file: server/luanti/Containerfile
           push: false
           tags: luanti-network-lab/luanti:test
