@@ -1,0 +1,10 @@
+# Exclude local dev weight from the container build context.
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.terraform/
+tests/
+.env
