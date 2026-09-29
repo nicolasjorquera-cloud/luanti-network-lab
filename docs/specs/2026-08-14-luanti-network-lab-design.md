@@ -106,14 +106,21 @@ Terraform. No data store / bucket / LLM in the MVP.
 
 ## 5. Phases
 
+> **Reordenamiento (2026, decisión de sesión, sin commits):** la observabilidad/seguridad
+> se ADELANTA por sobre Dialogflow CX. La infra zero-trust ya está OK; lo más maduro es
+> instrumentar lo que ya funciona (seguridad + observabilidad) antes de añadir el chatbot.
+> Dialogflow CX pasa a FASE POSTERIOR. Esto refuerza el eje seguridad/observabilidad, que
+> es el diferenciador del portfolio y el puente a roles cloud support / observability remoto.
+
 | Phase | Deliverable |
 |---|---|
 | **0** | Professional scaffold: `git init`, English README / CONTRIBUTING / SECURITY / CODE_OF_CONDUCT / CHANGELOG, Apache-2.0 LICENSE, `.gitignore`, `.editorconfig`, GitHub Actions CI (lint, pytest, gitleaks, terraform fmt/validate), badges, repo structure. |
-| **1** | Playable MVP: Tailscale (host + Windows), Podman rootless, Luanti + Mineclonia quadlet pod, UFW DENY-by-default Tailscale-only (zero-trust), `minetest.conf` whitelist, Windows client connect via Tailscale, verify disconnect when UDP 30000 is blocked. |
-| **2** | Chatbot GCP-first: Terraform (CX agent / flows / intents / pages, Service Account, Secret Manager, IAM, billing budget); Dialogflow CX agent design (welcome, mission, crafting, fallback); Python bridge (FastAPI, `/chat` + `/welcome`, sessions, rate-limit, Cloud Logging structured logs); Lua mod `bot`; shared-token auth between mod and bridge; unit tests (mocked CX) + in-game tests; FinOps cost-report script. |
-| **3** | Moderator + personality; optional App Builder data store (GCS bucket or wiki URL) for open-ended fallbacks; automated FinOps cost report via GitHub Actions cron. |
-| **4** | Rust bridge port (`reqwest` + `jsonwebtoken` + `serde`, CX REST `:detectIntent`, token cache), Python as reference. |
-| **5** | Optional: KVM VM, Vector observability, Rust `netwatch`. |
+| **1** | Playable MVP: Tailscale (host + Windows), Podman rootless, Luanti + Mineclonia quadlet pod, UFW DENY-by-default Tailscale-only (zero-trust), `minetest.conf` whitelist, Windows client connect via Tailscale, verify disconnect when UDP 30000 is blocked. ✅ done |
+| **2** *(REORDENADA)* | **Observability & Security con Datadog** (antes Fase 5): Datadog Agent en host + metrics; Podman container discovery; logs del Luanti + `auth.log` (failed logins); dashboard "Luanti Platform Overview" (Infra + App + Security); monitors/alertas básicas; (opcional) Cloud SIEM / security signals → DETECT→INVESTIGATE. Guía en `docs/plans/observability-datadog.md`. Convierte el principio "Observable" en evidencia vendible. |
+| **3** *(REORDENADA)* | **Chatbot GCP-first (Dialogflow CX)** (antes Fase 2): Terraform (CX agent / flows / intents / pages, Service Account, Secret Manager, IAM, billing budget); Dialogflow CX agent design (welcome, mission, crafting, fallback); Python bridge (FastAPI, `/chat` + `/welcome`, sessions, rate-limit, Cloud Logging structured logs); Lua mod `bot`; shared-token auth; unit tests (mocked CX) + in-game tests; FinOps cost-report script. |
+| **4** | Moderator + personality; optional App Builder data store (GCS bucket or wiki URL) for open-ended fallbacks; automated FinOps cost report via GitHub Actions cron. |
+| **5** | Rust bridge port (`reqwest` + `jsonwebtoken` + `serde`, CX REST `:detectIntent`, token cache), Python as reference. |
+| **6** | Optional: KVM VM, Rust `netwatch`. |
 
 ## 6. Repository structure
 

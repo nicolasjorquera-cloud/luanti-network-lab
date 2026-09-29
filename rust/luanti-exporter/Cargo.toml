@@ -1,0 +1,10 @@
+[package]
+name = "luanti-exporter"
+version = "0.1.0"
+edition = "2021"
+description = "Exporter Rust: sondea el estado UDP del servidor Luanti y empuja métricas al Datadog Agent via DogStatsD"
+license = "MIT OR Apache-2.0"
+
+# Cero dependencias externas: UDP + parseo de strings + DogStatsD se hacen
+# con la std de Rust. Así es fácil de leer, compila rápido y depende de nada.
+[dependencies]

@@ -8,11 +8,12 @@ specification lives in [`docs/specs/`](specs/).
 | Phase | Deliverable | State |
 |---|---|---|
 | 0 | Professional scaffold (license, CI, gitleaks, docs) | ✅ done |
-| 1 | Secure playable Luanti (Mineclonia) server | ✅ done |
-| 2 | Chatbot on GCP: Dialogflow CX agent as Terraform, Python bridge, Lua mod, FinOps | next |
-| 3 | Moderator/personality; optional App Builder data store; automated FinOps report | planned |
-| 4 | Rust bridge port (reference implementation in Python) | planned |
-| 5 | Optional: KVM VMs, observability | planned |
+| 1 | Secure playable Luanti (Mineclonia) server (zero-trust) | ✅ done |
+| 2 | **Observability & Security con Datadog**: Agent + metrics/logs + dashboard "Luanti Platform Overview" + alerts/Cloud SIEM. Adelantada (antes Dialogflow). | **next (adelantada)** |
+| 3 | Chatbot on GCP: Dialogflow CX agent as Terraform, Python bridge, Lua mod, FinOps | planned (después de observability) |
+| 4 | Moderator/personality; optional App Builder data store; automated FinOps report | planned |
+| 5 | Rust bridge port (reference implementation in Python) | planned |
+| 6 | Optional: KVM VM, Rust `netwatch` | planned |
 
 ## Key decisions
 
@@ -55,11 +56,21 @@ Real problems hit while building Phase 1 and how they were resolved:
 
 ## Next steps
 
-1. **Phase 2** — Dialogflow CX agent (flows/intents/pages) as Terraform; service
+> **Reordenamiento (decisión de sesión, sin commits):** observabilidad/seguridad adelantada
+> (Fase 2) sobre Dialogflow CX (Fase 3). La infra zero-trust ya está OK; lo más maduro es
+> instrumentar lo que ya funciona antes de añadir el chatbot.
+
+1. **Phase 2 — Observability & Security con Datadog:** guía en
+   [`docs/plans/observability-datadog.md`](plans/observability-datadog.md) + checklist de
+   arranque en [`docs/plans/fase2-arranque-checklist.md`](plans/fase2-arranque-checklist.md).
+   Instalar Agent (host), recolectar logs + métricas, dashboard "Luanti Platform Overview"
+   (4 capas: Infra/Red/App/Security), exporters Rust (`wg-exporter` + `luanti-exporter`),
+   alertas básicas. Convierte el principio "Observable" en evidencia vendible.
+2. **Phase 3 — Dialogflow CX agent** (flows/intents/pages) as Terraform; service
    account + Secret Manager + IAM + billing budget; Python bridge exposing
    `/chat` and `/welcome` (sessions, rate limiting, Cloud Logging); Lua mod that
    calls the bridge; unit tests with the CX API mocked; FinOps cost report.
-2. **Windows client** — Tailscale + Luanti client on the child's Windows machine.
-3. **Phase 3** — moderator/personality, optional App Builder data store,
+3. **Windows client** — Tailscale + Luanti client on the child's Windows machine.
+4. **Phase 4** — moderator/personality, optional App Builder data store,
    automated FinOps report.
-4. **Phase 4** — port the bridge to Rust.
+5. **Phase 5** — port the bridge to Rust.
