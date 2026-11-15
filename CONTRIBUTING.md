@@ -14,9 +14,8 @@ and observable.
 CI runs these on every push — run them locally too:
 
 ```bash
-ruff check server/bridge
-pytest server/bridge/tests
 cd infra/terraform && terraform fmt -check && terraform validate
+cd ../../rust/luanti-exporter && cargo fmt --check && cargo test
 ```
 
 ## Security
