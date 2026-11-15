@@ -29,7 +29,7 @@
   exposure by design.
 - SSH on the host — restricted to Tailscale only (recommended: `tailscale0:22`).
 - Tailscale DNS — only `100.100.100.100:53` accepted from `tailscale0`.
-- GCP APIs — protected by IAM service accounts (Phase 2).
+- GCP APIs — protected by IAM service accounts (Phase 6).
 
 ## Tailscale as ACL (the design)
 

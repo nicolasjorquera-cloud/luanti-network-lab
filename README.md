@@ -27,16 +27,24 @@ A secure Luanti (Mineclonia) server for a parent and child:
   network range is allowed in; everything else (including LAN) is dropped.
 - Server as a **Podman rootless** container managed by systemd.
 
-## Planned (Phase 2) — chatbot on GCP
+## Phase 2 — observability & security with Datadog (next)
 
-An in-game chatbot powered by **Dialogflow CX**, managed as GCP infrastructure
-as code. Scaffolds only — **not implemented yet**:
+Instrumenting what already works before adding new features: the zero-trust
+stack becomes **evidence** you can show (dashboards, alerts, SIEM). Plan in
+[`docs/plans/observability-datadog.md`](docs/plans/observability-datadog.md).
 
-- A CX agent managed as **Terraform IaC** (`infra/terraform/`, scaffold)
-- A **Python bridge** exposing `Luanti chat ↔ Dialogflow CX`
-  (`server/bridge/`, scaffold)
-- Secrets in **Secret Manager**, structured logs in **Cloud Logging**
-- **FinOps**: budgets, alerts, and Cloud Billing cost reports
+- **Datadog Agent** on the host: logs + system/network metrics
+- **Dashboard "Luanti Platform Overview"** across 4 layers: infra · network ·
+  app · security
+- **Rust exporters** (`rust/luanti-exporter/`): Prometheus metrics scraped by
+  the Agent — game player count, uptime, and health signals
+- **Alerts + Cloud SIEM**: UFW drops, auth anomalies, container restarts
+- **GCP**: budgets, alerts, and Cloud Billing cost reports (FinOps)
+
+> **Deferred:** the in-game chatbot (Dialogflow CX) is **Phase 6**, not now.
+> The FastAPI scaffold is kept for the record in
+> [`archive/bridge-chatbot-cx/`](archive/bridge-chatbot-cx/) — archived, not
+> deleted, and not wired into this phase.
 
 ## Principles
 
@@ -52,17 +60,19 @@ as code. Scaffolds only — **not implemented yet**:
 ```text
 docs/            architecture, threat model, security lab notes
 server/luanti/   container image, systemd unit, config
-server/bridge/   Python bridge: Luanti chat ↔ Dialogflow CX (Phase 2, scaffold)
-infra/terraform/ GCP infrastructure as code (Phase 2, scaffold)
+rust/            Rust exporters (luanti-exporter: Prometheus metrics)
+infra/terraform/ GCP infrastructure as code (Phase 6, scaffold)
 firewall/        UFW configuration and setup script
 tailscale/       Tailscale setup notes
 scripts/         install / status / reset
+archive/         deferred work, kept for the record (bridge-chatbot-cx)
 ```
 
 ## Status
 
 - Phase 0 (repo) ✅ · Phase 1 (playable server) ✅
-- Phase 2 (chatbot GCP) — planned
+- Phase 2 (observability & security with Datadog) — in progress
+- Phase 6 (chatbot on GCP) — deferred
 
 Full status, decisions and roadmap: [docs/ROADMAP.md](docs/ROADMAP.md).
 

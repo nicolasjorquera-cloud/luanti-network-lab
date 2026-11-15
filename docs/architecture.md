@@ -10,7 +10,6 @@
             │  ┌────────────────┐  │
             │  │ Podman pod      │  │
             │  │  ├─ luanti     │  │  Mineclonia, :30000/udp
-            │  │  └─ bridge     │  │  FastAPI → Dialogflow CX (Phase 2)
             │  └────────────────┘  │
             │  Tailscale (ACL) +   │
             │  UFW (zero-trust)    │
@@ -41,7 +40,7 @@
   `podman-system-generator` is available. Both use the same image, named volume,
   and publish UDP 30000 only to the Tailscale IP.
 - **Luanti + Mineclonia**: game server with persistent world volume.
-- **Bridge (Phase 2)**: Python FastAPI service that forwards in-game chat to
-  Dialogflow CX and returns replies.
 
-See `docs/gcp-architecture.md` (added in Phase 2) for the GCP side.
+See `docs/gcp-architecture.md` (added in Phase 6) for the GCP side.
+The in-game chatbot is deferred to Phase 6; its scaffold is archived under
+`archive/bridge-chatbot-cx/`.
