@@ -6,6 +6,13 @@ on:
   pull_request:
 
 jobs:
+  shellcheck:
+    name: Lint (shellcheck)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: shellcheck scripts/*.sh firewall/*.sh
+
   lint:
     name: Lint (ruff)
     runs-on: ubuntu-latest
